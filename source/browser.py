@@ -41,7 +41,7 @@ class Browser:
             raise StalePage("Document changed during evaluation")
         return response.get("result", {}).get("value")
 
-    def observe(self, screenshot=True):
+    def observe(self):
         if getattr(self, "after_input", None):
             action, self.after_input = self.after_input, None
             # This is read-only and happens after execution was logged, even if navigation interrupts it.
@@ -76,9 +76,7 @@ class Browser:
                 pass
         for attempt in range(10):
             try:
-                return browser_operation(
-                    {"operation": "observe", "session": self.session, "screenshot": screenshot}
-                )
+                return browser_operation({"operation": "observe", "session": self.session})
             except StalePage:
                 if attempt == 9:
                     raise
@@ -189,6 +187,4 @@ def browser_operation(request):
     if info is None:
         raise StalePage("Document is navigating")
     info["fingerprint"] = fingerprint(info)
-    if request.get("screenshot", True):
-        info["screenshot"] = call("Page.captureScreenshot", format="jpeg", quality=72)["data"]
     return info

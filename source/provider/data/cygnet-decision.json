@@ -1,0 +1,93 @@
+{
+ "engine": "llama",
+ "family": "cygnet",
+ "layout": "cygnet-v1",
+ "template": {
+  "pre": "<|turn>system\n",
+  "mid": "<turn|>\n<|turn>user\n",
+  "post": "<turn|>\n<|turn>model\n<|channel>thought\n<channel|>"
+ },
+ "add_bos": true,
+ "labels": {
+  "strings": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "E",
+   "F",
+   "G",
+   "H",
+   "I",
+   "J",
+   "K",
+   "L",
+   "M",
+   "N",
+   "O",
+   "P",
+   "Q",
+   "R",
+   "S",
+   "T",
+   "U",
+   "V",
+   "W",
+   "X",
+   "Y",
+   "Z"
+  ],
+  "ids": [
+   236776,
+   236799,
+   236780,
+   236796,
+   236788,
+   236811,
+   236823,
+   236814,
+   236777,
+   236863,
+   236855,
+   236798,
+   236792,
+   236797,
+   236806,
+   236791,
+   236935,
+   236794,
+   236773,
+   236774,
+   236836,
+   236847,
+   236824,
+   236917,
+   236874,
+   236953
+  ]
+ },
+ "max_options": 20,
+ "upstream": {
+  "recipe": "https://github.com/blockbrain-ai/cygnet-recipe",
+  "commit": "3cf591c692dec649f7c134449814610307c7bb3a",
+  "source": "shim/cygnet_shim.py, shim/decision_server.py",
+  "base": "google/gemma-4-12B-it",
+  "base_revision": "707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7"
+ },
+ "gguf": {
+  "repo": "ggml-org/gemma-4-12B-it-GGUF",
+  "revision": "e3e681731089efaa3f0917336944ac64752db8ba",
+  "path": "gemma-4-12B-it-Q8_0.gguf",
+  "sha256": "abfc3044b93795f6a446fc1a04468ac2d5fc5e9c92e237f09a5b3384c5a433e4",
+  "size": 12669646976,
+  "quantization": "Q8_0",
+  "architecture": "gemma4",
+  "url": "https://huggingface.co/ggml-org/gemma-4-12B-it-GGUF/resolve/e3e681731089efaa3f0917336944ac64752db8ba/gemma-4-12B-it-Q8_0.gguf"
+ },
+ "llama": {
+  "n_ctx": 16384,
+  "swa_full": true,
+  "plan": "cold",
+  "build": "b11146"
+ }
+}

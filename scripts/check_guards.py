@@ -2,7 +2,7 @@
 
 from urllib.parse import quote
 
-from jev_ultrafast.browser import Browser, StalePage
+from source.browser import Browser, StalePage
 
 HTML = """<!doctype html><title>Guard checks</title>
 <style>body{margin:30px}button{width:180px;height:50px}#outside{position:absolute;top:3000px}</style>
@@ -18,7 +18,7 @@ def main():
     browser = Browser("data:text/html," + quote(HTML))
     passed = []
     try:
-        page = browser.observe(screenshot=False)
+        page = browser.observe()
         action = next(a for a in page["actions"] if a["label"] == "Continue")
         browser.evaluate("document.querySelector('#target').style.transform='translateX(200px)'")
         assert browser.fresh(page), "Movement should use fresh geometry, not another model call"
@@ -44,14 +44,14 @@ def main():
         for label, expression in mutations.items():
             browser.evaluate("document.querySelector('#target').style.display='block'; "
                              "document.querySelector('#target').disabled=false")
-            page = browser.observe(screenshot=False)
+            page = browser.observe()
             browser.evaluate(expression)
             assert not browser.fresh(page), label
             passed.append(label + " invalidates")
 
         browser.evaluate("document.querySelector('#target').disabled=false; "
                          "document.querySelector('#target').style.display='block'")
-        page = browser.observe(screenshot=False)
+        page = browser.observe()
         action = next(a for a in page["actions"] if a["label"] == "Delete account")
         # A textless overlay does not alter the model's semantic state, but must block a click.
         browser.evaluate("const cover=document.createElement('div'); "
@@ -81,7 +81,7 @@ def main():
             <option>All</option><option>Design</option><option disabled>Unavailable</option>
           </select></form><aside id="unrelated">News</aside>
         """))
-        page = browser.observe(screenshot=False)
+        page = browser.observe()
         buy = next(a for a in page["actions"] if a["label"] == "Buy")
         browser.evaluate("document.querySelector('#unrelated').textContent='New unrelated news'")
         assert browser.fresh(page, buy)
@@ -93,13 +93,13 @@ def main():
             "form toggle": "document.querySelector('#check').checked=true",
             "target replacement": "document.querySelector('#buy').outerHTML=document.querySelector('#buy').outerHTML",
         }.items():
-            page = browser.observe(screenshot=False)
+            page = browser.observe()
             buy = next(a for a in page["actions"] if a["label"] == "Buy")
             browser.evaluate(expression)
             assert not browser.fresh(page, buy), label
             passed.append(label + " invalidates action-specific guard")
 
-        page = browser.observe(screenshot=False)
+        page = browser.observe()
         actions = page["actions"]
         for role in ("checkbox", "radio"):
             assert {a["kind"] for a in actions if a.get("role") == role} == {"click"}
@@ -116,10 +116,10 @@ def main():
         browser.evaluate("document.querySelector('#query').addEventListener('input',()=>setTimeout(()=>{"
                          "document.querySelector('#suggestions').innerHTML='<div role=option>Generated</div>'"
                          "},60))")
-        page = browser.observe(screenshot=False)
+        page = browser.observe()
         field = next(a for a in page["actions"] if a["kind"] == "fill")
         browser.act(field, page, text="Generated")
-        page = browser.observe(screenshot=False)
+        page = browser.observe()
         value = browser.evaluate("document.querySelector('#query').value")
         assert value == "Generated", repr(value)
         assert any(a.get("role") == "option" for a in page["actions"])
