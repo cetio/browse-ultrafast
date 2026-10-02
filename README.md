@@ -26,8 +26,8 @@ with Agent("https://en.wikipedia.org/wiki/Main_Page",
         print(state["elapsed_ms"], state["status"])
 ```
 
-`uv run --env-file .env python scripts/smoke.py` drives a self-contained fixture end to end and
-verifies the actual outcome — a `DONE` choice is not proof.
+`uv run pytest -m integration` drives realistic fixture tasks end to end and verifies each
+actual outcome — a `DONE` choice is not proof.
 
 ## Providers
 
@@ -66,9 +66,11 @@ node --check source/snapshot.js
 uv build
 ```
 
-Tests are offline. `uv run python scripts/check_guards.py` exercises real controls in a local
-browser without model calls. `scripts/smoke.py` makes real model calls against the configured
-providers.
+Unit tests are offline. `uv run pytest` also runs the live integration tasks when `.env` and
+Chrome are present: four increasingly complex fixture goals through the configured providers,
+each verified against the final page rather than the model's `DONE`. `uv run pytest -m "not
+integration"` stays offline. `uv run python scripts/check_guards.py` exercises real controls in
+a local browser without model calls.
 
 ## License
 

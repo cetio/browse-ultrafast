@@ -8,3 +8,5 @@ artifacts/
 runs/
 *.egg-info/
 dist/
+stack.yaml
+stack.yml

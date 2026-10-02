@@ -25,3 +25,4 @@ select = ["E", "F", "I"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = ["integration: live fixture tasks driven by the .env providers in a real Chrome"]
